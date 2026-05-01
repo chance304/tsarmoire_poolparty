@@ -3,7 +3,8 @@ const ERROR_SHEET    = 'Errors';
 const RATE_LIMIT_KEY = 'rate_limit';
 const RATE_WINDOW_MS = 60 * 1000; /* 1 minute */
 const RATE_MAX       = 15;        /* max submissions per window globally */
-const SLOT_CAPACITY  = 10;        /* max reservations per date+slot */
+const SLOT_CAPACITY  = 10;        /* max confirmed bookings per date+slot (total) */
+const SOLO_CAP       = 3;         /* max confirmed solo bookings per date+slot */
 
 function doGet(e) {
   if (e.parameter.action === 'slots') {
@@ -39,27 +40,18 @@ function doPost(e) {
     return _respond({ ok: false, error: 'duplicate' });
   }
 
-  /* Server-side slot capacity check */
-  if (_isSlotFull(data.date, data.time_slot)) {
-    return _respond({ ok: false, error: 'slot_full' });
-  }
+  /* Determine confirmed vs waitlist */
+  const status = _determineStatus(data);
 
-  /* Write to sheet — must succeed before email */
+  /* Write to sheet */
   try {
-    _appendRow(data);
+    _appendRow(data, status);
   } catch (err) {
     _logError('sheet_write', err);
     return _respond({ ok: false, error: 'server_error' });
   }
 
-  /* Send confirmation email — failure is non-blocking */
-  try {
-    _sendConfirmation(data);
-  } catch (err) {
-    _logError('email', err);
-  }
-
-  return _respond({ ok: true });
+  return _respond({ ok: true, status });
 }
 
 /* ── Helpers ───────────────────────────────────────────── */
@@ -74,6 +66,8 @@ function _validate(d) {
   if (!d.name || String(d.name).trim().length === 0) return 'name_required';
   const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!d.email || !emailRx.test(String(d.email).trim())) return 'invalid_email';
+  if (!d.phone || String(d.phone).trim().length === 0) return 'phone_required';
+  if (d.party_type !== 'solo' && d.party_type !== 'plus_one') return 'party_type_required';
   if (!d.date || String(d.date).trim().length === 0) return 'date_required';
   if (!d.time_slot || String(d.time_slot).trim().length === 0) return 'slot_required';
   return null;
@@ -84,6 +78,7 @@ function _isDuplicate(email) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName(SHEET_NAME);
     if (!sheet || sheet.getLastRow() < 2) return false;
+    /* Email is column 3 */
     const emails = sheet.getRange(2, 3, sheet.getLastRow() - 1, 1).getValues();
     const target = String(email).toLowerCase().trim();
     return emails.some(row => String(row[0]).toLowerCase().trim() === target);
@@ -93,21 +88,30 @@ function _isDuplicate(email) {
   }
 }
 
-function _isSlotFull(date, timeSlot) {
+function _determineStatus(data) {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName(SHEET_NAME);
-    if (!sheet || sheet.getLastRow() < 2) return false;
-    /* Columns 7 (Date) and 8 (Time Slot) — 1-indexed */
-    const rows = sheet.getRange(2, 7, sheet.getLastRow() - 1, 2).getValues();
-    const count = rows.filter(row =>
-      String(row[0]).trim() === String(date).trim() &&
-      String(row[1]).trim() === String(timeSlot).trim()
-    ).length;
-    return count >= SLOT_CAPACITY;
+    if (!sheet || sheet.getLastRow() < 2) return 'Confirmed';
+
+    /* Columns: 7=Date, 8=Time Slot, 9=Party Type, 10=Status */
+    const rows = sheet.getRange(2, 7, sheet.getLastRow() - 1, 4).getValues();
+
+    const confirmedRows = rows.filter(row =>
+      String(row[0]).trim() === String(data.date).trim() &&
+      String(row[1]).trim() === String(data.time_slot).trim() &&
+      String(row[3]).trim() === 'Confirmed'
+    );
+
+    const totalConfirmed = confirmedRows.length;
+    const soloConfirmed  = confirmedRows.filter(row => String(row[2]).trim() === 'solo').length;
+
+    if (totalConfirmed >= SLOT_CAPACITY) return 'Waitlist';
+    if (data.party_type === 'solo' && soloConfirmed >= SOLO_CAP) return 'Waitlist';
+    return 'Confirmed';
   } catch (err) {
-    _logError('slot_check', err);
-    return false; /* fail open */
+    _logError('determine_status', err);
+    return 'Confirmed'; /* fail open */
   }
 }
 
@@ -118,20 +122,26 @@ function _getSlotAvailability() {
     const slots = {};
 
     if (sheet && sheet.getLastRow() >= 2) {
-      const rows = sheet.getRange(2, 7, sheet.getLastRow() - 1, 2).getValues();
+      /* Columns: 7=Date, 8=Time Slot, 9=Party Type, 10=Status */
+      const rows = sheet.getRange(2, 7, sheet.getLastRow() - 1, 4).getValues();
       rows.forEach(row => {
-        const date = String(row[0]).trim();
-        const slot = String(row[1]).trim();
-        if (!date || !slot) return;
+        const date      = String(row[0]).trim();
+        const slot      = String(row[1]).trim();
+        const partyType = String(row[2]).trim();
+        const status    = String(row[3]).trim();
+        if (!date || !slot || status !== 'Confirmed') return;
         if (!slots[date]) slots[date] = {};
-        slots[date][slot] = (slots[date][slot] || 0) + 1;
+        if (!slots[date][slot]) slots[date][slot] = { solo: 0, plus_one: 0, total: 0 };
+        if (partyType === 'solo') slots[date][slot].solo++;
+        else if (partyType === 'plus_one') slots[date][slot].plus_one++;
+        slots[date][slot].total++;
       });
     }
 
-    return _respond({ ok: true, slots, capacity: SLOT_CAPACITY });
+    return _respond({ ok: true, slots, caps: { solo: SOLO_CAP, total: SLOT_CAPACITY } });
   } catch (err) {
     _logError('slots_fetch', err);
-    return _respond({ ok: true, slots: {}, capacity: SLOT_CAPACITY }); /* fail open — show all available */
+    return _respond({ ok: true, slots: {}, caps: { solo: SOLO_CAP, total: SLOT_CAPACITY } });
   }
 }
 
@@ -155,56 +165,27 @@ function _checkRateLimit() {
   }
 }
 
-function _appendRow(d) {
+function _appendRow(d, status) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['ID', 'Name', 'Email', 'Instagram', 'TikTok', 'Phone', 'Date', 'Time Slot', 'Registered At']);
+    sheet.appendRow(['ID', 'Name', 'Email', 'Phone', 'Instagram', 'TikTok', 'Date', 'Time Slot', 'Party Type', 'Status', 'Submitted At']);
     sheet.setFrozenRows(1);
   }
   sheet.appendRow([
     d.id,
     String(d.name).trim(),
     String(d.email).trim().toLowerCase(),
+    d.phone      || '',
     d.instagram  || '',
     d.tiktok     || '',
-    d.phone      || '',
     d.date       || '',
     d.time_slot  || '',
+    d.party_type || '',
+    status,
     d.registered_at
   ]);
-}
-
-function _sendConfirmation(d) {
-  const firstName = String(d.name).trim().split(/\s+/)[0];
-  MailApp.sendEmail({
-    to: d.email,
-    subject: "TSA Café — Your table is reserved",
-    htmlBody: `
-      <div style="font-family:Georgia,serif;color:#151514;max-width:480px;margin:0 auto">
-        <p style="letter-spacing:.12em;font-size:11px;text-transform:uppercase;color:#96815c">
-          T's Armoire
-        </p>
-        <h1 style="font-size:2rem;margin:.25em 0;font-weight:400">You're in, ${firstName}.</h1>
-        <p style="line-height:1.7;color:#444;margin:.75em 0">
-          Your table at <strong>TSA Café</strong> is reserved.
-        </p>
-        <p style="line-height:1.7;color:#444;font-size:1.1rem;margin:.5em 0">
-          <strong>${d.date}</strong> &middot; ${d.time_slot}
-        </p>
-        <p style="line-height:1.7;color:#444;margin:.75em 0">
-          Get ready for good coffee, great fits, and an experience you'll want to stay in.
-        </p>
-        <p style="line-height:1.7;color:#444;margin:.75em 0">
-          We'll see you soon.
-        </p>
-        <p style="line-height:1.7;color:#888;font-size:.875rem;margin:1.5em 0 0">
-          — The T's Armoire Team
-        </p>
-      </div>
-    `
-  });
 }
 
 function _logError(context, err) {

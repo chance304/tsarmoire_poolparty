@@ -1,11 +1,15 @@
 /* ── State ───────────────────────────────────────────────── */
-let cur          = 0;
-const N          = 5;
-let busy         = false;
-let selectedDate = null;
-let selectedSlot = null;
-let slotData     = {};
-let slotCapacity = 10; /* updated from server on fetchSlots() */
+let cur              = 0;
+const N              = 5;
+let busy             = false;
+let selectedDate     = null;
+let selectedSlot     = null;
+let selectedPartyType = null;
+let slotData         = {};
+let caps             = { solo: 3, total: 10 }; /* updated from server on fetchSlots() */
+
+const STORE_KEY  = 'tsa_cafe_reservations_v2';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKuSCDIDko0cKfjoDf0yDtHA3cj_ErEvhNsvsbA5Eq4AvV6QBgwYQhmVUNuYeR5Mhb/exec';
 
 const pages    = document.querySelectorAll('.page');
 const curtain  = document.getElementById('curtain');
@@ -65,16 +69,13 @@ function go(dir) {
 }
 
 /* ── Slot Availability ───────────────────────────────────── */
-const STORE_KEY  = 'tsa_cafe_reservations';
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKuSCDIDko0cKfjoDf0yDtHA3cj_ErEvhNsvsbA5Eq4AvV6QBgwYQhmVUNuYeR5Mhb/exec';
-
 function fetchSlots() {
   fetch(SCRIPT_URL + '?action=slots')
     .then(res => res.json())
     .then(data => {
       if (data.slots) {
         slotData = data.slots;
-        if (data.capacity) slotCapacity = data.capacity;
+        if (data.caps) caps = data.caps;
         if (selectedDate) updateSlotAvailability();
       }
     })
@@ -82,10 +83,11 @@ function fetchSlots() {
 }
 
 function updateSlotAvailability() {
-  const counts = (slotData[selectedDate] || {});
+  const slotCounts = (slotData[selectedDate] || {});
   document.querySelectorAll('#slot-times .slot-btn').forEach(btn => {
     const slot = btn.dataset.slot;
-    const isFull = (counts[slot] || 0) >= slotCapacity;
+    const info = slotCounts[slot] || { total: 0 };
+    const isFull = info.total >= caps.total;
     btn.classList.toggle('full', isFull);
     btn.disabled = isFull;
     if (isFull && btn.classList.contains('selected')) {
@@ -97,7 +99,7 @@ function updateSlotAvailability() {
 }
 
 function selectDate(btn) {
-  document.querySelectorAll('.slot-dates .slot-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#slot-dates .slot-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   selectedDate = btn.dataset.date;
 
@@ -123,6 +125,13 @@ function selectSlot(btn) {
   }, 80);
 }
 
+function selectParty(btn) {
+  document.querySelectorAll('#slot-party .slot-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedPartyType = btn.dataset.party;
+  document.getElementById('party-error').style.display = 'none';
+}
+
 /* ── Registration ────────────────────────────────────────── */
 function setFieldError(fieldEl, errEl, msg) {
   fieldEl.classList.add('invalid');
@@ -137,31 +146,44 @@ document.getElementById('f-name').addEventListener('input', () =>
   clearFieldError(document.getElementById('field-name')));
 document.getElementById('f-email').addEventListener('input', () =>
   clearFieldError(document.getElementById('field-email')));
+document.getElementById('f-phone').addEventListener('input', () =>
+  clearFieldError(document.getElementById('field-phone')));
 
 function handleSubmit(e) {
   e.preventDefault();
 
   const nameVal   = document.getElementById('f-name').value.trim();
   const emailVal  = document.getElementById('f-email').value.trim();
+  const phoneVal  = document.getElementById('f-phone').value.trim();
   const igVal     = document.getElementById('f-ig').value.trim();
   const tiktokVal = document.getElementById('f-tiktok').value.trim();
-  const phoneVal  = document.getElementById('f-phone').value.trim();
 
   const fieldName  = document.getElementById('field-name');
   const fieldEmail = document.getElementById('field-email');
+  const fieldPhone = document.getElementById('field-phone');
   const errName    = document.getElementById('err-name');
   const errEmail   = document.getElementById('err-email');
+  const errPhone   = document.getElementById('err-phone');
+  const partyErr   = document.getElementById('party-error');
   const slotErr    = document.getElementById('slot-error');
 
   clearFieldError(fieldName);
   clearFieldError(fieldEmail);
-  slotErr.style.display = 'none';
+  clearFieldError(fieldPhone);
+  partyErr.style.display = 'none';
+  slotErr.style.display  = 'none';
 
   let valid = true;
 
   if (!selectedDate || !selectedSlot) {
     slotErr.textContent = 'Please select a date and time';
     slotErr.style.display = 'block';
+    valid = false;
+  }
+
+  if (!selectedPartyType) {
+    partyErr.textContent = 'Please select your experience';
+    partyErr.style.display = 'block';
     valid = false;
   }
 
@@ -179,6 +201,11 @@ function handleSubmit(e) {
     valid = false;
   }
 
+  if (!phoneVal) {
+    setFieldError(fieldPhone, errPhone, 'Please enter your WhatsApp number');
+    valid = false;
+  }
+
   if (!valid) return;
 
   /* Duplicate check */
@@ -190,16 +217,17 @@ function handleSubmit(e) {
 
   /* Loading state */
   const btn = document.getElementById('rsvp-btn');
-  btn.textContent = 'Reserving →';
+  btn.textContent = 'Requesting →';
   btn.disabled = true;
 
   const entry = {
     id:           'tsa-' + Date.now(),
     name:         nameVal,
     email:        emailVal,
+    phone:        phoneVal,
     instagram:    igVal     || null,
     tiktok:       tiktokVal || null,
-    phone:        phoneVal  || null,
+    party_type:   selectedPartyType,
     date:         selectedDate,
     time_slot:    selectedSlot,
     registered_at: new Date().toISOString()
@@ -222,24 +250,16 @@ function handleSubmit(e) {
       setFieldError(fieldEmail, errEmail, 'Already reserved with this email');
       existing.push(entry);
       localStorage.setItem(STORE_KEY, JSON.stringify(existing));
-      btn.textContent = 'Reserve →';
+      btn.textContent = 'Request Reservation →';
       btn.disabled = false;
-    } else if (data.error === 'slot_full') {
-      slotErr.textContent = 'This slot is now full — please select another time';
-      slotErr.style.display = 'block';
-      document.querySelectorAll('#slot-times .slot-btn.selected').forEach(b => b.classList.remove('selected'));
-      selectedSlot = null;
-      document.getElementById('slot-form-wrap').classList.remove('visible');
-      btn.textContent = 'Reserve →';
-      btn.disabled = false;
-      fetchSlots();
     } else {
       throw new Error(data.error || 'server_error');
     }
   })
   .catch(() => {
-    setFieldError(fieldEmail, errEmail, 'Something went wrong — please try again');
-    btn.textContent = 'Reserve →';
+    slotErr.textContent = 'Something went wrong — please try again';
+    slotErr.style.display = 'block';
+    btn.textContent = 'Request Reservation →';
     btn.disabled = false;
   });
 }
