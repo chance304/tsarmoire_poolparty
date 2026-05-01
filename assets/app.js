@@ -5,6 +5,7 @@ let busy         = false;
 let selectedDate = null;
 let selectedSlot = null;
 let slotData     = {};
+let slotCapacity = 10; /* updated from server on fetchSlots() */
 
 const pages    = document.querySelectorAll('.page');
 const curtain  = document.getElementById('curtain');
@@ -73,6 +74,7 @@ function fetchSlots() {
     .then(data => {
       if (data.slots) {
         slotData = data.slots;
+        if (data.capacity) slotCapacity = data.capacity;
         if (selectedDate) updateSlotAvailability();
       }
     })
@@ -83,7 +85,7 @@ function updateSlotAvailability() {
   const counts = (slotData[selectedDate] || {});
   document.querySelectorAll('#slot-times .slot-btn').forEach(btn => {
     const slot = btn.dataset.slot;
-    const isFull = (counts[slot] || 0) >= 10;
+    const isFull = (counts[slot] || 0) >= slotCapacity;
     btn.classList.toggle('full', isFull);
     btn.disabled = isFull;
     if (isFull && btn.classList.contains('selected')) {

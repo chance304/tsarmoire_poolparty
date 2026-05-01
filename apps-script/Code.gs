@@ -128,10 +128,10 @@ function _getSlotAvailability() {
       });
     }
 
-    return _respond({ ok: true, slots });
+    return _respond({ ok: true, slots, capacity: SLOT_CAPACITY });
   } catch (err) {
     _logError('slots_fetch', err);
-    return _respond({ ok: true, slots: {} }); /* fail open — show all available */
+    return _respond({ ok: true, slots: {}, capacity: SLOT_CAPACITY }); /* fail open — show all available */
   }
 }
 
