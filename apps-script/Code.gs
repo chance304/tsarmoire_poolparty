@@ -85,10 +85,13 @@ function _isDuplicate(email) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName(SHEET_NAME);
     if (!sheet || sheet.getLastRow() < 2) return false;
-    /* Email is column 3 */
-    const emails = sheet.getRange(2, 3, sheet.getLastRow() - 1, 1).getValues();
+    /* Read Email (col 3) + Status (col 10) — only block if already Confirmed */
+    const rows = sheet.getRange(2, 3, sheet.getLastRow() - 1, 8).getValues();
     const target = String(email).toLowerCase().trim();
-    return emails.some(row => String(row[0]).toLowerCase().trim() === target);
+    return rows.some(row =>
+      String(row[0]).toLowerCase().trim() === target &&
+      String(row[7]).trim() === 'Confirmed'
+    );
   } catch (err) {
     _logError('duplicate_check', err);
     return false; /* fail open */

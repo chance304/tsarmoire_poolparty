@@ -132,6 +132,16 @@
       <span class="slot-error" id="slot-error"></span>
     </div>
 
+    <!-- Waitlist nudge (shown instead of form when slot is full) -->
+    <div class="slot-section" id="slot-waitlist-nudge">
+      <div class="slot-sublabel">This slot is full</div>
+      <p class="form-privacy" style="margin-bottom: 24px;">Want to pick a different time? Or we can keep you on the waitlist for this slot.</p>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+        <button class="form-cta" onclick="pickAnotherSlot()">Pick another time →</button>
+        <button class="form-cta" onclick="confirmWaitlist()" style="background: none; border-color: rgba(21,20,20,0.28); color: rgba(21,20,20,0.65);">Join waitlist →</button>
+      </div>
+    </div>
+
     <!-- Step 3: Details form (revealed after slot selected) -->
     <div class="slot-section" id="slot-form-wrap">
       <form class="form-wrap" id="rsvp" onsubmit="handleSubmit(event)" novalidate>

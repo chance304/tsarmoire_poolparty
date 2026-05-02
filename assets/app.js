@@ -125,6 +125,20 @@ function selectSlot(btn) {
   }, 80);
 }
 
+function pickAnotherSlot() {
+  document.getElementById('slot-waitlist-nudge').classList.remove('visible');
+  document.querySelectorAll('#slot-times .slot-btn').forEach(b => b.classList.remove('selected'));
+  selectedSlot = null;
+  document.getElementById('slot-times-wrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function confirmWaitlist() {
+  document.getElementById('p4-tag').textContent    = 'You\'re on the List';
+  document.getElementById('p4-headline').innerHTML = 'You\'re on<br><em>the list.</em>';
+  document.getElementById('p4-body').textContent   = 'This slot is full, but you\'re on the waitlist. We\'ll reach out if a spot opens up.';
+  go(1);
+}
+
 function selectParty(btn) {
   document.querySelectorAll('#slot-party .slot-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -236,16 +250,18 @@ function handleSubmit(e) {
   .then(data => {
     if (data.ok) {
       if (data.status === 'Waitlist') {
-        document.getElementById('p4-tag').textContent      = 'You\'re on the List';
-        document.getElementById('p4-headline').innerHTML   = 'You\'re on<br><em>the list.</em>';
-        document.getElementById('p4-body').textContent     = 'This slot is full, but you\'re on the waitlist. We\'ll reach out if a spot opens up.';
+        btn.textContent = 'Request Reservation →';
+        btn.disabled = false;
+        document.getElementById('slot-form-wrap').classList.remove('visible');
+        document.getElementById('slot-waitlist-nudge').classList.add('visible');
+        document.getElementById('slot-waitlist-nudge').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       } else {
-        document.getElementById('p4-tag').textContent      = 'Request Received';
-        document.getElementById('p4-headline').innerHTML   = 'We\'ll be<br><em>in touch.</em>';
-        document.getElementById('p4-body').textContent     = 'Your request has been received. We\'ll reach out to confirm shortly.';
+        document.getElementById('p4-tag').textContent    = 'Request Received';
+        document.getElementById('p4-headline').innerHTML = 'We\'ll be<br><em>in touch.</em>';
+        document.getElementById('p4-body').textContent   = 'Your request has been received. We\'ll reach out to confirm shortly.';
+        if (window.gtag) gtag('event', 'reservation_complete', { event_category: 'engagement' });
+        go(1);
       }
-      if (window.gtag) gtag('event', 'reservation_complete', { event_category: 'engagement' });
-      go(1);
     } else if (data.error === 'duplicate') {
       setFieldError(fieldEmail, errEmail, 'Already reserved with this email');
       btn.textContent = 'Request Reservation →';
