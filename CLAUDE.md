@@ -57,11 +57,11 @@ Keyboard (ArrowRight/Enter) and swipe navigation are disabled on pages 2 and 3.
 
 Four-step progressive reveal on a single scrollable page:
 1. **Date buttons** — May 8 / May 9 / May 10 (always visible)
-2. **Time slot buttons** — 7 hourly slots, revealed after date selected; slots at total capacity (≥ 10 confirmed bookings) get `.full` class and are `disabled`
-3. **Party type** — "Just me" (solo) / "With a +1" (plus_one) — required, revealed with the form
-4. **Details form** — name (required), email (required), WhatsApp number (required), Instagram, TikTok (optional); revealed after slot selected
+2. **Time slot buttons** — 7 hourly slots, revealed after date selected; slots get `.full` class and are `disabled` based on party type: total ≥ `SLOT_CAPACITY`, or solo ≥ `SOLO_CAP` (when "Just me" is selected), or plus_one ≥ `PLUS_ONE_CAP` (when "With a +1" is selected)
+3. **Party type** — "Just me" (solo) / "With a +1" (plus_one) — required, revealed with the form; changing party type immediately re-evaluates slot availability
+4. **Details form** — name (min 2 chars, required), email (required), WhatsApp number (min 7 digits, required), Instagram, TikTok (optional); revealed after slot selected
 
-Slot availability is fetched via `doGet(?action=slots)` every time the user enters #p3. Slots are greyed on total confirmed count only — solo cap is enforced server-side, not in the UI.
+Slot availability is fetched via `doGet(?action=slots)` every time the user enters #p3. Greying is **party-type-aware** — a slot can be available for +1 but greyed for solo if the single solo cap is taken.
 
 ## Backend
 
@@ -72,7 +72,7 @@ See `DEPLOYMENT.md` for setup and re-deploy instructions.
 `SCRIPT_URL` must be updated after deploying the `Code.gs` to the T's Armoire org account.
 
 **`doGet(?action=slots)` — slot availability:**  
-Returns confirmed booking counts per date, time slot, and party type, plus the capacity caps. Slots are greyed when `total >= caps.total`.  
+Returns confirmed booking counts per date, time slot, and party type, plus the capacity caps. The frontend greys slots based on party type and the returned caps.  
 Response shape:
 ```json
 {
@@ -82,7 +82,7 @@ Response shape:
       "10:30 AM – 11:30 AM": { "solo": 1, "plus_one": 3, "total": 4 }
     }
   },
-  "caps": { "solo": 3, "total": 10 }
+  "caps": { "solo": 1, "plus_one": 4, "total": 5 }
 }
 ```
 
@@ -93,16 +93,17 @@ Fields sent in POST body:
 id, name, email, phone, instagram, tiktok, party_type, date, time_slot, registered_at
 ```
 
-All submissions are accepted (no hard slot-full rejection). The backend assigns `Status: Confirmed` or `Status: Waitlist` based on current confirmed counts.
+All submissions are accepted (no hard rejection). The backend assigns `Status: Confirmed` or `Status: Waitlist` based on current confirmed counts. A `reason` field accompanies Waitlist responses (`solo_full`, `plus_one_full`, `slot_full`). A confirmation or waitlist email is sent automatically via `MailApp`.
 
 **Sheet name:** `Reservations`  
 **Sheet columns:** ID · Name · Email · Phone · Instagram · TikTok · Date · Time Slot · Party Type · Status · Submitted At
 
 **Capacity constants (in `Code.gs`):**
-- `SLOT_CAPACITY = 10` — max confirmed bookings per date+slot (total)
-- `SOLO_CAP = 3` — max confirmed solo bookings per date+slot
+- `SLOT_CAPACITY = 5` — max confirmed bookings per date+slot (total)
+- `SOLO_CAP = 1` — max confirmed solo bookings per date+slot
+- `PLUS_ONE_CAP = 4` — max confirmed +1 bookings per date+slot
 
-Status logic (`_determineStatus`): if total confirmed ≥ `SLOT_CAPACITY`, or party type is solo and solo confirmed ≥ `SOLO_CAP` → `Waitlist`; otherwise → `Confirmed`. Team manually messages guests per their status via WhatsApp.
+Status logic (`_determineStatus`): if total confirmed ≥ `SLOT_CAPACITY` → `Waitlist (slot_full)`; if solo and solo confirmed ≥ `SOLO_CAP` → `Waitlist (solo_full)`; if plus_one and plus_one confirmed ≥ `PLUS_ONE_CAP` → `Waitlist (plus_one_full)`; otherwise → `Confirmed`. The frontend shows a reason-specific nudge on Waitlist, letting guests pick another slot or explicitly join the waitlist.
 
 ## Design tokens
 

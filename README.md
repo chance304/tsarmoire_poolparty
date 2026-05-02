@@ -68,19 +68,25 @@ See `DEPLOYMENT.md` for the full Apps Script setup.
 | Field | Required | Notes |
 |---|---|---|
 | Date | Yes | May 8, May 9, or May 10 — button picker |
-| Time Slot | Yes | One of 7 hourly slots — greyed when total confirmed ≥ 10 |
+| Time Slot | Yes | One of 7 hourly slots — greyed per party-type cap |
 | Party Type | Yes | "Just me" (solo) or "With a +1" (plus_one) |
-| Full Name | Yes | |
+| Full Name | Yes | Min 2 characters |
 | Email Address | Yes | Used for duplicate check |
-| WhatsApp Number | Yes | Team uses this to send confirmation |
+| WhatsApp Number | Yes | Min 7 digits; team uses for follow-up |
 | Instagram Handle | No | |
 | TikTok Handle | No | |
 
 ## Slot capacity
 
-Each time slot holds a maximum of **10 confirmed bookings per day** (configurable via `SLOT_CAPACITY` in `Code.gs`). Within that, a maximum of **3 solo bookings** per slot (`SOLO_CAP` in `Code.gs`).
+Per time slot, per day:
 
-The frontend fetches live confirmed counts via `doGet` when the guest reaches the reservation page, and greys out slots that have hit the total cap. The backend auto-assigns each submission a `Status` of `Confirmed` or `Waitlist` — overflow is never hard-rejected, so the team can manage the waitlist via WhatsApp.
+| Cap | Value | Constant |
+|---|---|---|
+| Total confirmed | **5** | `SLOT_CAPACITY` in `Code.gs` |
+| Solo bookings | **1** | `SOLO_CAP` in `Code.gs` |
+| +1 bookings | **4** | `PLUS_ONE_CAP` in `Code.gs` |
+
+The frontend fetches live confirmed counts when the guest reaches the reservation page. Slots are greyed out based on the selected party type — if "Just me" is selected and the solo spot is taken, that slot greys out even if +1 spots remain. The backend auto-assigns `Status: Confirmed` or `Status: Waitlist`. If waitlisted, the guest sees a nudge offering to pick another slot or join the waitlist. A confirmation email is sent automatically for both statuses.
 
 ## Known TODOs
 

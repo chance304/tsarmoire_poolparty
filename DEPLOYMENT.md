@@ -86,14 +86,15 @@ Missing or reordered columns will cause new submissions to write data to the wro
 
 ### Adjusting capacity
 
-Two constants in `Code.gs` control bookings per date+slot:
+Three constants in `Code.gs` control bookings per date+slot:
 
 ```js
-const SLOT_CAPACITY = 10;  // max confirmed bookings per slot (total)
-const SOLO_CAP      = 3;   // max confirmed solo bookings per slot
+const SLOT_CAPACITY  = 5;  // max confirmed bookings per slot (total)
+const SOLO_CAP       = 1;  // max confirmed solo bookings per slot
+const PLUS_ONE_CAP   = 4;  // max confirmed +1 bookings per slot
 ```
 
-Change either value and re-deploy as a new version (see above). No frontend change needed — the frontend reads `caps` from the `doGet` response.
+Change any value and re-deploy as a new version (see above). No frontend change needed — the frontend reads `caps` from the `doGet` response.
 
 ---
 
@@ -143,18 +144,24 @@ After deploying a new Apps Script URL:
 - [ ] On page 3 (What to Expect), click "Reserve your spot →" — confirms it advances to the slot picker
 - [ ] On page 4 (slot picker), click a date — time slots should appear
 - [ ] Select a time slot — the party type + details form should appear below
-- [ ] Confirm full slots (10 confirmed bookings) appear greyed out and are not selectable
+- [ ] Select a date — time slots appear; slots at total cap (≥ 5 confirmed) appear greyed out
+- [ ] Select "Just me" and a date where the solo spot is taken — that slot greys out even if +1 spots remain
 - [ ] Submit the form without selecting party type — form shows "Please select your experience"
+- [ ] Submit the form with a name under 2 characters — form shows "Please enter your full name"
+- [ ] Submit the form with an invalid phone format (e.g. `abc`) — form shows "Please enter a valid phone number"
 - [ ] Submit the form without a phone number — form shows "Please enter your WhatsApp number"
 - [ ] Submit the form with all required fields filled (party type, name, email, phone) — button shows "Requesting →" then advances to request-received page
 - [ ] Confirm page 5 shows "Request Received" / "We'll be in touch."
 - [ ] Confirm a new row appears in the Google Sheet with all 11 columns populated (ID, Name, Email, Phone, Instagram, TikTok, Date, Time Slot, Party Type, Status, Submitted At)
 - [ ] Confirm `Status` column shows `Confirmed` for a fresh booking
-- [ ] Submit as solo when solo count for that slot = 3 but total < 10 — sheet should show `Status: Waitlist`
-- [ ] Submit when total confirmed = 10 — sheet should show `Status: Waitlist` (slot was greyed on frontend)
-- [ ] Submit the same email again — server returns `duplicate` error; form shows "Already reserved with this email"
+- [ ] Confirm a confirmation email is sent to the guest on submit (check inbox)
+- [ ] Submit as solo when solo count for that slot = 1 — server returns `Waitlist` with reason `solo_full`; guest sees waitlist nudge with "Pick another time" and "Join waitlist" options
+- [ ] Submit as +1 when plus_one count for that slot = 4 — server returns `Waitlist` with reason `plus_one_full`; nudge appears
+- [ ] Submit when total confirmed = 5 — sheet should show `Status: Waitlist`; waitlist email sent
+- [ ] Click "Join waitlist →" on nudge — page 5 shows waitlist copy; waitlist email arrives
+- [ ] Submit the same email again (already Confirmed) — server returns `duplicate` error; form shows "Already reserved with this email"
 - [ ] Kill network mid-submit — form shows "Something went wrong — please try again" and re-enables the button
 - [ ] Submit leaving Instagram and TikTok blank — sheet shows empty cells, no error
 - [ ] Test on mobile — date/slot/party buttons are tappable, form scrolls, no swipe navigation on slot picker page
 - [ ] Check the `Errors` tab in the Google Sheet exists and logs any backend failures
-- [ ] Call `doGet?action=slots` directly — response includes `caps: { solo: 3, total: 10 }` and slot counts grouped by party type
+- [ ] Call `doGet?action=slots` directly — response includes `caps: { solo: 1, plus_one: 4, total: 5 }` and slot counts grouped by party type
