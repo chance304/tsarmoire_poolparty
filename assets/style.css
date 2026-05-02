@@ -475,11 +475,43 @@ html, body {
   border-color: #baac8a;
 }
 
-.slot-btn.full {
-  opacity: 0.28;
-  cursor: not-allowed;
-  text-decoration: line-through;
+.slot-btn.waitlist {
+  border-color: #baac8a;
+  border-style: dashed;
+  color: rgba(21,20,20,0.58);
 }
+
+.slot-btn.waitlist.selected {
+  background: rgba(21,20,20,0.62);
+  border-style: solid;
+  border-color: transparent;
+  color: #f6f4f0;
+}
+
+.slot-wl-tag {
+  display: none;
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  margin-left: 10px;
+  opacity: 0.8;
+}
+
+.slot-btn.waitlist .slot-wl-tag { display: inline; }
+
+.waitlist-notice {
+  display: none;
+  margin-bottom: 24px;
+  padding: 11px 16px;
+  border-left: 2px solid #baac8a;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 9.5px;
+  letter-spacing: 0.32em;
+  color: rgba(21,20,20,0.68);
+  text-transform: uppercase;
+}
+
+.waitlist-notice.visible { display: block; }
 
 .slot-error {
   display: none;

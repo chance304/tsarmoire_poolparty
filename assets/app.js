@@ -84,20 +84,19 @@ function fetchSlots() {
 
 function updateSlotAvailability() {
   const slotCounts = (slotData[selectedDate] || {});
+  let selectedIsWaitlist = false;
   document.querySelectorAll('#slot-times .slot-btn').forEach(btn => {
     const slot = btn.dataset.slot;
     const info = slotCounts[slot] || { solo: 0, plus_one: 0, total: 0 };
     let isFull = info.total >= caps.total;
     if (!isFull && selectedPartyType === 'solo')     isFull = info.solo     >= caps.solo;
     if (!isFull && selectedPartyType === 'plus_one') isFull = info.plus_one >= caps.plus_one;
-    btn.classList.toggle('full', isFull);
-    btn.disabled = isFull;
-    if (isFull && btn.classList.contains('selected')) {
-      btn.classList.remove('selected');
-      selectedSlot = null;
-      document.getElementById('slot-form-wrap').classList.remove('visible');
-    }
+    btn.classList.toggle('waitlist', isFull);
+    if (btn.classList.contains('selected') && isFull) selectedIsWaitlist = true;
   });
+  if (selectedSlot) {
+    document.getElementById('slot-waitlist-notice').classList.toggle('visible', selectedIsWaitlist);
+  }
 }
 
 function selectDate(btn) {
@@ -108,18 +107,26 @@ function selectDate(btn) {
   document.querySelectorAll('#slot-times .slot-btn').forEach(b => b.classList.remove('selected'));
   selectedSlot = null;
   document.getElementById('slot-form-wrap').classList.remove('visible');
+  document.getElementById('slot-waitlist-notice').classList.remove('visible');
   document.getElementById('slot-error').style.display = 'none';
 
-  document.getElementById('slot-times-wrap').classList.add('visible');
-  updateSlotAvailability();
+  document.getElementById('slot-party-wrap').classList.add('visible');
+
+  if (selectedPartyType) {
+    document.getElementById('slot-times-wrap').classList.add('visible');
+    updateSlotAvailability();
+  } else {
+    document.getElementById('slot-times-wrap').classList.remove('visible');
+  }
 }
 
 function selectSlot(btn) {
-  if (btn.disabled) return;
   document.querySelectorAll('#slot-times .slot-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   selectedSlot = btn.dataset.slot;
   document.getElementById('slot-error').style.display = 'none';
+
+  document.getElementById('slot-waitlist-notice').classList.toggle('visible', btn.classList.contains('waitlist'));
 
   document.getElementById('slot-form-wrap').classList.add('visible');
   setTimeout(() => {
@@ -127,26 +134,18 @@ function selectSlot(btn) {
   }, 80);
 }
 
-function pickAnotherSlot() {
-  document.getElementById('slot-waitlist-nudge').classList.remove('visible');
-  document.querySelectorAll('#slot-times .slot-btn').forEach(b => b.classList.remove('selected'));
-  selectedSlot = null;
-  document.getElementById('slot-times-wrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function confirmWaitlist() {
-  document.getElementById('p4-tag').textContent    = 'You\'re on the List';
-  document.getElementById('p4-headline').innerHTML = 'You\'re on<br><em>the list.</em>';
-  document.getElementById('p4-body').textContent   = 'This slot is full, but you\'re on the waitlist. We\'ll reach out if a spot opens up.';
-  go(1);
-}
-
 function selectParty(btn) {
   document.querySelectorAll('#slot-party .slot-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   selectedPartyType = btn.dataset.party;
   document.getElementById('party-error').style.display = 'none';
-  if (selectedDate) updateSlotAvailability();
+  if (selectedDate) {
+    document.getElementById('slot-times-wrap').classList.add('visible');
+    updateSlotAvailability();
+    setTimeout(() => {
+      document.getElementById('slot-times-wrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 80);
+  }
 }
 
 /* ── Registration ────────────────────────────────────────── */
@@ -261,23 +260,10 @@ function handleSubmit(e) {
   .then(data => {
     if (data.ok) {
       if (data.status === 'Waitlist') {
-        const nudgeTitles = {
-          solo_full:    'Solo spot taken',
-          plus_one_full: '+1 spots full',
-          slot_full:    'This slot is full'
-        };
-        const nudgeBodies = {
-          solo_full:    'The solo spot for this time is already booked. Try a different slot, or join the waitlist for this one.',
-          plus_one_full: 'All +1 spots for this time are taken. Try a different slot, or join the waitlist for this one.',
-          slot_full:    'This slot is fully booked. Try a different time, or join the waitlist for this one.'
-        };
-        document.getElementById('nudge-title').textContent = nudgeTitles[data.reason] || 'This slot is full';
-        document.getElementById('nudge-body').textContent  = nudgeBodies[data.reason] || 'Want to pick a different time? Or we can keep you on the waitlist.';
-        btn.textContent = 'Request Reservation →';
-        btn.disabled = false;
-        document.getElementById('slot-form-wrap').classList.remove('visible');
-        document.getElementById('slot-waitlist-nudge').classList.add('visible');
-        document.getElementById('slot-waitlist-nudge').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        document.getElementById('p4-tag').textContent    = 'You\'re on the List';
+        document.getElementById('p4-headline').innerHTML = 'You\'re on<br><em>the list.</em>';
+        document.getElementById('p4-body').textContent   = 'This slot is full, but you\'re on the waitlist. We\'ll reach out if a spot opens up.';
+        go(1);
       } else {
         document.getElementById('p4-tag').textContent    = 'Request Received';
         document.getElementById('p4-headline').innerHTML = 'We\'ll be<br><em>in touch.</em>';

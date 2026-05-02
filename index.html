@@ -117,44 +117,37 @@
       <button class="slot-btn" data-date="May 10" onclick="selectDate(this)">May 10</button>
     </div>
 
-    <!-- Step 2: Time slot picker (revealed after date selected) -->
+    <!-- Step 2: Party type (revealed after date selected) -->
+    <div class="slot-section" id="slot-party-wrap">
+      <div class="slot-sublabel">Your experience</div>
+      <div class="slot-dates" id="slot-party">
+        <button type="button" class="slot-btn" data-party="solo" onclick="selectParty(this)">Just me</button>
+        <button type="button" class="slot-btn" data-party="plus_one" onclick="selectParty(this)">With a +1</button>
+      </div>
+      <span class="slot-error" id="party-error"></span>
+    </div>
+
+    <!-- Step 3: Time slot picker (revealed after party type selected) -->
     <div class="slot-section" id="slot-times-wrap">
       <div class="slot-sublabel">Select a time</div>
       <div class="slot-times" id="slot-times">
-        <button class="slot-btn" data-slot="10:30 AM – 11:30 AM" onclick="selectSlot(this)">10:30 AM – 11:30 AM</button>
-        <button class="slot-btn" data-slot="11:45 AM – 12:45 PM" onclick="selectSlot(this)">11:45 AM – 12:45 PM</button>
-        <button class="slot-btn" data-slot="1:00 PM – 2:00 PM"   onclick="selectSlot(this)">1:00 PM – 2:00 PM</button>
-        <button class="slot-btn" data-slot="2:15 PM – 3:15 PM"   onclick="selectSlot(this)">2:15 PM – 3:15 PM</button>
-        <button class="slot-btn" data-slot="3:30 PM – 4:30 PM"   onclick="selectSlot(this)">3:30 PM – 4:30 PM</button>
-        <button class="slot-btn" data-slot="4:45 PM – 5:45 PM"   onclick="selectSlot(this)">4:45 PM – 5:45 PM</button>
-        <button class="slot-btn" data-slot="6:00 PM – 7:00 PM"   onclick="selectSlot(this)">6:00 PM – 7:00 PM</button>
+        <button class="slot-btn" data-slot="10:30 AM – 11:30 AM" onclick="selectSlot(this)">10:30 AM – 11:30 AM<span class="slot-wl-tag">· Waitlist</span></button>
+        <button class="slot-btn" data-slot="11:45 AM – 12:45 PM" onclick="selectSlot(this)">11:45 AM – 12:45 PM<span class="slot-wl-tag">· Waitlist</span></button>
+        <button class="slot-btn" data-slot="1:00 PM – 2:00 PM"   onclick="selectSlot(this)">1:00 PM – 2:00 PM<span class="slot-wl-tag">· Waitlist</span></button>
+        <button class="slot-btn" data-slot="2:15 PM – 3:15 PM"   onclick="selectSlot(this)">2:15 PM – 3:15 PM<span class="slot-wl-tag">· Waitlist</span></button>
+        <button class="slot-btn" data-slot="3:30 PM – 4:30 PM"   onclick="selectSlot(this)">3:30 PM – 4:30 PM<span class="slot-wl-tag">· Waitlist</span></button>
+        <button class="slot-btn" data-slot="4:45 PM – 5:45 PM"   onclick="selectSlot(this)">4:45 PM – 5:45 PM<span class="slot-wl-tag">· Waitlist</span></button>
+        <button class="slot-btn" data-slot="6:00 PM – 7:00 PM"   onclick="selectSlot(this)">6:00 PM – 7:00 PM<span class="slot-wl-tag">· Waitlist</span></button>
       </div>
       <span class="slot-error" id="slot-error"></span>
     </div>
 
-    <!-- Waitlist nudge (shown instead of form when slot is full) -->
-    <div class="slot-section" id="slot-waitlist-nudge">
-      <div class="slot-sublabel" id="nudge-title">This slot is full</div>
-      <p class="form-privacy" id="nudge-body" style="margin-bottom: 24px;">Want to pick a different time? Or we can keep you on the waitlist for this slot.</p>
-      <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-        <button class="form-cta" onclick="pickAnotherSlot()">Pick another time →</button>
-        <button class="form-cta" onclick="confirmWaitlist()" style="background: none; border-color: rgba(21,20,20,0.28); color: rgba(21,20,20,0.65);">Join waitlist →</button>
-      </div>
-    </div>
-
-    <!-- Step 3: Details form (revealed after slot selected) -->
+    <!-- Step 4: Details form (revealed after slot selected) -->
     <div class="slot-section" id="slot-form-wrap">
+      <div class="waitlist-notice" id="slot-waitlist-notice">
+        You're joining the waitlist for this slot
+      </div>
       <form class="form-wrap" id="rsvp" onsubmit="handleSubmit(event)" novalidate>
-
-        <!-- Party type -->
-        <div style="margin-bottom: 28px;">
-          <div class="slot-sublabel">Your experience</div>
-          <div class="slot-dates" id="slot-party">
-            <button type="button" class="slot-btn" data-party="solo" onclick="selectParty(this)">Just me</button>
-            <button type="button" class="slot-btn" data-party="plus_one" onclick="selectParty(this)">With a +1</button>
-          </div>
-          <span class="slot-error" id="party-error"></span>
-        </div>
 
         <div class="field" id="field-name">
           <label for="f-name">Full Name <span class="req">*</span></label>
