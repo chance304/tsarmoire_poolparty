@@ -95,7 +95,13 @@ function updateSlotAvailability() {
     if (btn.classList.contains('selected') && isFull) selectedIsWaitlist = true;
   });
   if (selectedSlot) {
-    document.getElementById('slot-waitlist-notice').classList.toggle('visible', selectedIsWaitlist);
+    const notice = document.getElementById('slot-waitlist-notice');
+    notice.textContent = selectedIsWaitlist
+      ? 'You are joining the waitlist for this slot. We will be in touch if a spot becomes available.'
+      : selectedPartyType === 'solo'
+        ? 'You are reserving a table for one.'
+        : 'You are reserving a table for two. Should your party exceed two guests, please contact us directly.';
+    notice.classList.add('visible');
   }
 }
 
@@ -126,7 +132,14 @@ function selectSlot(btn) {
   selectedSlot = btn.dataset.slot;
   document.getElementById('slot-error').style.display = 'none';
 
-  document.getElementById('slot-waitlist-notice').classList.toggle('visible', btn.classList.contains('waitlist'));
+  const notice = document.getElementById('slot-waitlist-notice');
+  const isWaitlist = btn.classList.contains('waitlist');
+  notice.textContent = isWaitlist
+    ? 'You are joining the waitlist for this slot. We will be in touch if a spot becomes available.'
+    : selectedPartyType === 'solo'
+      ? 'You are reserving a table for one.'
+      : 'You are reserving a table for two. Should your party exceed two guests, please contact us directly.';
+  notice.classList.add('visible');
 
   document.getElementById('slot-form-wrap').classList.add('visible');
   setTimeout(() => {
