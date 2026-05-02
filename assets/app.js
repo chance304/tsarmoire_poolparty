@@ -250,6 +250,18 @@ function handleSubmit(e) {
   .then(data => {
     if (data.ok) {
       if (data.status === 'Waitlist') {
+        const nudgeTitles = {
+          solo_full:    'Solo spot taken',
+          plus_one_full: '+1 spots full',
+          slot_full:    'This slot is full'
+        };
+        const nudgeBodies = {
+          solo_full:    'The solo spot for this time is already booked. Try a different slot, or join the waitlist for this one.',
+          plus_one_full: 'All +1 spots for this time are taken. Try a different slot, or join the waitlist for this one.',
+          slot_full:    'This slot is fully booked. Try a different time, or join the waitlist for this one.'
+        };
+        document.getElementById('nudge-title').textContent = nudgeTitles[data.reason] || 'This slot is full';
+        document.getElementById('nudge-body').textContent  = nudgeBodies[data.reason] || 'Want to pick a different time? Or we can keep you on the waitlist.';
         btn.textContent = 'Request Reservation →';
         btn.disabled = false;
         document.getElementById('slot-form-wrap').classList.remove('visible');

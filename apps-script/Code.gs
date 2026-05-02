@@ -42,11 +42,11 @@ function doPost(e) {
   }
 
   /* Determine confirmed vs waitlist — locked to prevent race conditions */
-  let status;
+  let status, reason;
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(10000);
-    status = _determineStatus(data);
+    ({ status, reason } = _determineStatus(data));
     _appendRow(data, status);
   } catch (err) {
     _logError('sheet_write', err);
@@ -62,7 +62,7 @@ function doPost(e) {
     _logError('email', err);
   }
 
-  return _respond({ ok: true, status });
+  return _respond({ ok: true, status, reason });
 }
 
 /* ── Helpers ───────────────────────────────────────────── */
@@ -121,13 +121,13 @@ function _determineStatus(data) {
     const soloConfirmed    = confirmedRows.filter(row => String(row[2]).trim() === 'solo').length;
     const plusOneConfirmed = confirmedRows.filter(row => String(row[2]).trim() === 'plus_one').length;
 
-    if (totalConfirmed >= SLOT_CAPACITY)                                    return 'Waitlist';
-    if (data.party_type === 'solo'     && soloConfirmed    >= SOLO_CAP)     return 'Waitlist';
-    if (data.party_type === 'plus_one' && plusOneConfirmed >= PLUS_ONE_CAP) return 'Waitlist';
-    return 'Confirmed';
+    if (totalConfirmed >= SLOT_CAPACITY)                                    return { status: 'Waitlist', reason: 'slot_full' };
+    if (data.party_type === 'solo'     && soloConfirmed    >= SOLO_CAP)     return { status: 'Waitlist', reason: 'solo_full' };
+    if (data.party_type === 'plus_one' && plusOneConfirmed >= PLUS_ONE_CAP) return { status: 'Waitlist', reason: 'plus_one_full' };
+    return { status: 'Confirmed', reason: null };
   } catch (err) {
     _logError('determine_status', err);
-    return 'Confirmed'; /* fail open */
+    return { status: 'Confirmed', reason: null }; /* fail open */
   }
 }
 
