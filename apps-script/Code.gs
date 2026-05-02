@@ -190,7 +190,7 @@ function _appendRow(d, status) {
     sheet.appendRow(['ID', 'Name', 'Email', 'Phone', 'Instagram', 'TikTok', 'Date', 'Time Slot', 'Party Type', 'Status', 'Submitted At']);
     sheet.setFrozenRows(1);
   }
-  sheet.appendRow([
+  const rowData = [
     d.id,
     String(d.name).trim(),
     String(d.email).trim().toLowerCase(),
@@ -202,7 +202,13 @@ function _appendRow(d, status) {
     d.party_type || '',
     status,
     d.registered_at
-  ]);
+  ];
+  const nextRow = sheet.getLastRow() + 1;
+  /* Force Date (col 7) and Time Slot (col 8) as plain text — prevents Google
+     Sheets from auto-converting "May 8" to a Date serial, which breaks the
+     string comparison in _determineStatus and _getSlotAvailability. */
+  sheet.getRange(nextRow, 7, 1, 2).setNumberFormat('@');
+  sheet.getRange(nextRow, 1, 1, rowData.length).setValues([rowData]);
 }
 
 function _sendConfirmation(d, status) {
