@@ -11,9 +11,9 @@ html, body {
   background:
     linear-gradient(
       to right,
-      rgba(246,244,240,0.97) 0%,
-      rgba(246,244,240,0.82) 40%,
-      rgba(246,244,240,0.55) 100%
+      rgba(246,244,240,0.58) 0%,
+      rgba(246,244,240,0.38) 40%,
+      rgba(246,244,240,0.15) 100%
     ),
     linear-gradient(
       to bottom,
@@ -433,9 +433,9 @@ html, body {
     background:
       linear-gradient(
         to bottom,
-        rgba(246,244,240,0.95) 0%,
-        rgba(246,244,240,0.78) 45%,
-        rgba(246,244,240,0.48) 100%
+        rgba(246,244,240,0.55) 0%,
+        rgba(246,244,240,0.32) 45%,
+        rgba(246,244,240,0.10) 100%
       ),
       linear-gradient(
         to bottom,
