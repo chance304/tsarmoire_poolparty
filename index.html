@@ -1,39 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>T's Armoire Summer Club — June 26, 1PM</title>
 
   <!-- SEO -->
-  <meta name="description" content="Join us poolside at the Moxy Hotel on June 26 at 1PM. Register your interest for T's Armoire Summer Club — an exclusive summer takeover.">
+  <meta name="description"
+    content="Join us poolside at the Moxy Hotel on June 26 at 1PM. Register your interest for T's Armoire Summer Club — an exclusive summer takeover.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://launch.tsarmoiremanufacturing.com.np">
   <meta name="theme-color" content="#f6f4f0">
 
   <!-- Open Graph -->
-  <meta property="og:type"        content="website">
-  <meta property="og:url"         content="https://launch.tsarmoiremanufacturing.com.np">
-  <meta property="og:title"       content="T's Armoire Summer Club — June 26, 1PM">
-  <meta property="og:description" content="Sunshine, cocktails, good music & endless content moments. Register your interest for an exclusive poolside takeover by T's Armoire.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://launch.tsarmoiremanufacturing.com.np">
+  <meta property="og:title" content="T's Armoire Summer Club — June 26, 1PM">
+  <meta property="og:description"
+    content="Sunshine, cocktails, good music & endless content moments. Register your interest for an exclusive poolside takeover by T's Armoire.">
   <!-- og:image: replace with confirmed event image before launch -->
-  <meta property="og:image"       content="https://launch.tsarmoiremanufacturing.com.np/assets/og-image.jpg">
-  <meta property="og:site_name"   content="T's Armoire">
+  <meta property="og:image" content="https://launch.tsarmoiremanufacturing.com.np/assets/og-image.jpg">
+  <meta property="og:site_name" content="T's Armoire">
 
   <!-- Twitter Card -->
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:title"       content="T's Armoire Summer Club — June 26, 1PM">
-  <meta name="twitter:description" content="Sunshine, cocktails, good music & endless content moments. Register your interest for an exclusive poolside takeover by T's Armoire.">
-  <meta name="twitter:image"       content="https://launch.tsarmoiremanufacturing.com.np/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="T's Armoire Summer Club — June 26, 1PM">
+  <meta name="twitter:description"
+    content="Sunshine, cocktails, good music & endless content moments. Register your interest for an exclusive poolside takeover by T's Armoire.">
+  <meta name="twitter:image" content="https://launch.tsarmoiremanufacturing.com.np/assets/og-image.jpg">
 
   <!-- Favicon (placeholder — replace with brand asset) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23Daccb4' width='32' height='32'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia%2C serif' font-size='18' fill='%23151514'%3ET%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23Daccb4' width='32' height='32'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia%2C serif' font-size='18' fill='%23151514'%3ET%3C/text%3E%3C/svg%3E">
 
   <!-- Google Analytics (replace GA_MEASUREMENT_ID with your property ID) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'GA_MEASUREMENT_ID');
   </script>
@@ -41,119 +46,127 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="assets/style.css">
 </head>
+
 <body>
 
-<!-- Background & texture -->
-<div id="bg"></div>
-<div id="grain"></div>
+  <!-- Background & texture -->
+  <div id="bg"></div>
+  <div id="grain"></div>
 
-<!-- Transition curtain -->
-<div id="curtain"></div>
+  <!-- Transition curtain -->
+  <div id="curtain"></div>
 
-<!-- Chrome -->
-<div id="wordmark">T's Armoire</div>
-<div id="counter" aria-live="polite" aria-atomic="true">01 / 04</div>
-<div id="prog-track"><div id="prog-fill"></div></div>
-<nav id="nav" role="navigation" aria-label="Page navigation">
-  <button class="nav-btn" id="btn-back" onclick="go(-1)" disabled aria-label="Go back">←</button>
-  <button class="nav-btn" id="btn-fwd"  onclick="go(1)" aria-label="Go forward">→</button>
-</nav>
-
-<!-- ═══════════ PAGES ═══════════ -->
-<div id="stage">
-
-  <!-- ─── PAGE 1 · Opening ───────────────────────────────────── -->
-  <div class="page active entering" id="p0">
-    <div class="tag s">An Exclusive Invitation</div>
-    <div class="rule s"></div>
-    <div class="headline s">Summer<br><em>Club.</em></div>
-    <div class="body s">Sunshine. Cocktails. Good music.<br>Everything summer dreams are made of.</div>
-    <div class="caption s">June 26 · 1PM · Moxy Hotel Pool</div>
-    <div class="ghost">01</div>
+  <!-- Chrome -->
+  <div id="wordmark">T's Armoire</div>
+  <div id="counter" aria-live="polite" aria-atomic="true">01 / 04</div>
+  <div id="prog-track">
+    <div id="prog-fill"></div>
   </div>
+  <nav id="nav" role="navigation" aria-label="Page navigation">
+    <button class="nav-btn" id="btn-back" onclick="go(-1)" disabled aria-label="Go back">←</button>
+    <button class="nav-btn" id="btn-fwd" onclick="go(1)" aria-label="Go forward">→</button>
+  </nav>
 
-  <!-- ─── PAGE 2 · The Story ─────────────────────────────────── -->
-  <div class="page" id="p1">
-    <div class="tag s">The Experience</div>
-    <div class="rule s"></div>
-    <div class="headline s">Not just<br><em>a pool day.</em></div>
-    <div class="body s">For one day only, we're taking over the Moxy Hotel Pool for an exclusive afternoon with our favourite girls.</div>
-    <div class="fit-note s">
-      <span class="fit-note-label">Your Summer Club Pass Includes</span>
-      Exclusive access to the poolside takeover · Cocktails, refreshing drinks, popsicles & summer bites — all on us · Aesthetic photo moments, music & surprise brand experiences · A chance to become part of the Summer Club story
+  <!-- ═══════════ PAGES ═══════════ -->
+  <div id="stage">
+
+    <!-- ─── PAGE 1 · Opening ───────────────────────────────────── -->
+    <div class="page active entering" id="p0">
+      <div class="tag s">An Exclusive Invitation</div>
+      <div class="rule s"></div>
+      <div class="headline s">Summer<br><em>Club.</em></div>
+      <div class="body s">Sunshine. Cocktails. Good music.<br>Everything summer dreams are made of.</div>
+      <div class="caption s">June 26 · 1PM · Moxy Hotel Pool</div>
     </div>
-    <div class="body s">The dress code? T's Armoire, obviously. Get dolled up in your favourite look, bring your energy, and meet us by the pool.</div>
-    <div class="caption s">Limited spots. Endless summer memories.</div>
-    <div class="ghost">02</div>
-  </div>
 
-  <!-- ─── PAGE 3 · Social Consent ─────────────────────────── -->
-  <div class="page" id="p2">
-    <div class="tag s">One Last Thing</div>
-    <div class="rule s"></div>
-    <div class="headline s" style="font-size: clamp(38px, 6.5vw, 72px); margin-bottom: 18px;">Your<br><em>moment.</em></div>
-    <div class="body s">This experience will be captured for T's Armoire's social media, campaigns & future stories.</div>
-    <div class="body s">Would you love to be part of the T's Armoire Summer Club content?</div>
-    <div class="consent-btns s">
-      <button class="consent-btn" onclick="handleConsent('yes')">Yes, I'm ready for my moment ✨</button>
-      <button class="consent-btn" onclick="handleConsent('no')">I'd prefer to stay behind the camera</button>
+    <!-- ─── PAGE 2 · The Story ─────────────────────────────────── -->
+    <div class="page" id="p1">
+      <div class="tag s">The Experience</div>
+      <div class="rule s"></div>
+      <div class="headline s">Not just<br><em>a pool day.</em></div>
+      <div class="body s">For one day only, we're taking over the Moxy Hotel Pool for an exclusive afternoon with our
+        favourite girls.</div>
+      <div class="fit-note s">
+        <span class="fit-note-label">Your Summer Club Pass Includes</span>
+        Exclusive access to the poolside takeover · Cocktails, refreshing drinks, popsicles & summer bites — all on us ·
+        Aesthetic photo moments, music & surprise brand experiences · A chance to become part of the Summer Club story
+      </div>
+      <div class="body s">The dress code? T's Armoire, obviously. Get dolled up in your favourite look, bring your
+        energy, and meet us by the pool.</div>
+      <div class="caption s">Limited spots. Endless summer memories.</div>
     </div>
-    <div class="ghost">03</div>
-  </div>
 
-  <!-- ─── PAGE 4 · Register ──────────────────────────────────── -->
-  <div class="page" id="p3">
-    <div class="tag s">Register Your Interest</div>
-    <div class="rule s"></div>
-    <div class="headline s" style="font-size: clamp(44px, 7vw, 78px); margin-bottom: 14px;">A few<br><em>details.</em></div>
-    <form class="form-wrap s" id="rsvp" onsubmit="handleSubmit(event)" novalidate>
-      <div class="field" id="field-name">
-        <label for="f-name">Full Name</label>
-        <input id="f-name" type="text" placeholder="Your name" autocomplete="name">
-        <span class="field-error" id="err-name"></span>
+    <!-- ─── PAGE 3 · Social Consent ─────────────────────────── -->
+    <div class="page" id="p2">
+      <div class="tag s">One Last Thing</div>
+      <div class="rule s"></div>
+      <div class="headline s" style="font-size: clamp(38px, 6.5vw, 72px); margin-bottom: 18px;">Your<br><em>moment.</em>
       </div>
-      <div class="field" id="field-email">
-        <label for="f-email">Email Address</label>
-        <input id="f-email" type="email" placeholder="your@email.com" autocomplete="email">
-        <span class="field-error" id="err-email"></span>
+      <div class="body s">This experience will be captured for T's Armoire's social media, campaigns & future stories.
       </div>
-      <div class="form-row">
-        <div class="field">
-          <label for="f-ig">Instagram Handle</label>
-          <input id="f-ig" type="text" placeholder="@handle" autocomplete="off">
+      <div class="body s">Would you love to be part of the T's Armoire Summer Club content?</div>
+      <div class="consent-btns s">
+        <button class="consent-btn consent-btn--yes" onclick="handleConsent('yes')">Yes, I'm ready for my moment</button>
+        <button class="consent-btn consent-btn--no" onclick="handleConsent('no')">I'd prefer to stay behind the camera</button>
+      </div>
+    </div>
+
+    <!-- ─── PAGE 4 · Register ──────────────────────────────────── -->
+    <div class="page" id="p3">
+      <div class="tag s">Register Your Interest</div>
+      <div class="rule s"></div>
+      <div class="headline s" style="font-size: clamp(44px, 7vw, 78px); margin-bottom: 14px;">A few<br><em>details.</em>
+      </div>
+      <form class="form-wrap s" id="rsvp" onsubmit="handleSubmit(event)" novalidate>
+        <div class="field" id="field-name">
+          <label for="f-name">Full Name</label>
+          <input id="f-name" type="text" placeholder="Your name" autocomplete="name">
+          <span class="field-error" id="err-name"></span>
+        </div>
+        <div class="field" id="field-email">
+          <label for="f-email">Email Address</label>
+          <input id="f-email" type="email" placeholder="your@email.com" autocomplete="email">
+          <span class="field-error" id="err-email"></span>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="f-ig">Instagram Handle</label>
+            <input id="f-ig" type="text" placeholder="@handle" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="f-tiktok">TikTok Handle</label>
+            <input id="f-tiktok" type="text" placeholder="@handle" autocomplete="off">
+          </div>
         </div>
         <div class="field">
-          <label for="f-tiktok">TikTok Handle</label>
-          <input id="f-tiktok" type="text" placeholder="@handle" autocomplete="off">
+          <label for="f-phone">Phone Number</label>
+          <input id="f-phone" type="tel" placeholder="+977 0000000000" autocomplete="tel">
         </div>
-      </div>
-      <div class="field">
-        <label for="f-phone">Phone Number</label>
-        <input id="f-phone" type="tel" placeholder="+977 0000000000" autocomplete="tel">
-      </div>
-      <button type="submit" class="form-cta" id="rsvp-btn">Register Interest →</button>
-      <p class="form-privacy">Your information is used only to process your registration and is not shared with third parties.</p>
-    </form>
-    <div class="ghost">04</div>
+        <button type="submit" class="form-cta" id="rsvp-btn">Register Interest →</button>
+        <p class="form-privacy">Your information is used only to process your registration and is not shared with third
+          parties.</p>
+      </form>
+    </div>
+
+    <!-- ─── PAGE 5 · Thank You ─────────────────────────────────── -->
+    <div class="page" id="p4">
+      <div class="tag s">You're Registered</div>
+      <div class="rule s"></div>
+      <div class="headline s">Thank<br><em>you.</em></div>
+      <div class="body s">If selected, we'll reach out to you directly.</div>
+      <div class="body s">Keep an eye on your inbox.</div>
+      <div class="caption s">T's Armoire Summer Club — June 26 · 1PM</div>
+      <div class="ghost">TSA</div>
+    </div>
+
   </div>
 
-  <!-- ─── PAGE 5 · Thank You ─────────────────────────────────── -->
-  <div class="page" id="p4">
-    <div class="tag s">You're Registered</div>
-    <div class="rule s"></div>
-    <div class="headline s">Thank<br><em>you.</em></div>
-    <div class="body s">If selected, we'll reach out to you directly.</div>
-    <div class="body s">Keep an eye on your inbox.</div>
-    <div class="caption s">T's Armoire Summer Club — June 26 · 1PM</div>
-    <div class="ghost">TSA</div>
-  </div>
-
-</div>
-
-<script src="assets/app.js"></script>
+  <script src="assets/app.js"></script>
 </body>
+
 </html>
