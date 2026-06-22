@@ -59,7 +59,7 @@ Registrations POST to a Google Apps Script Web App (`SCRIPT_URL` in `assets/app.
 The script source lives in `apps-script/Code.gs`.  
 See `DEPLOYMENT.md` for setup and re-deploy instructions.
 
-Current deployment is on a **personal account** pending migration to the T's Armoire org account — update `SCRIPT_URL` in `assets/app.js` after the org deployment is complete.
+Current deployment is on the T's Armoire **org account**.
 
 **Fields sent in POST body:**
 
@@ -80,6 +80,5 @@ id, name, email, instagram, tiktok, phone, social_consent, registered_at
 
 ## Known TODOs
 
-- `SCRIPT_URL` in `assets/app.js` points to a personal account deployment — redeploy from org account per `DEPLOYMENT.md` and update the URL
 - Replace `GA_MEASUREMENT_ID` in `index.html` with the real Google Analytics property ID
 - Replace `og:image` placeholder in `index.html` with the confirmed event photo

@@ -85,7 +85,7 @@ function handleConsent(choice) {
 
 /* ── Registration ────────────────────────────────────────── */
 const STORE_KEY  = 'tsa_summer_club_registrations';
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKuSCDIDko0cKfjoDf0yDtHA3cj_ErEvhNsvsbA5Eq4AvV6QBgwYQhmVUNuYeR5Mhb/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzt5HXNo0QtpVyM5KQYyCIdyq8Fls5FE3udj9a9bH4EJcCcywSk96CgkTPSAydZuNq/exec';
 
 function setFieldError(fieldEl, errEl, msg) {
   fieldEl.classList.add('invalid');

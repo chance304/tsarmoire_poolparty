@@ -114,7 +114,7 @@ Before the site goes live:
 - [ ] Replace `og:image` in `index.html` with the confirmed event photo (currently placeholder path `assets/og-image.jpg`)
 - [ ] Replace `GA_MEASUREMENT_ID` in `index.html` with the real Google Analytics property ID
 - [ ] Write and link privacy policy page (required — site collects email and phone)
-- [ ] Migrate Apps Script deployment from personal account to T's Armoire org account and update `SCRIPT_URL` in `assets/app.js`
+- [x] Migrate Apps Script deployment from personal account to T's Armoire org account and update `SCRIPT_URL` in `assets/app.js`
 
 ---
 

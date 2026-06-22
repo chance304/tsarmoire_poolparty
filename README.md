@@ -76,6 +76,5 @@ See `DEPLOYMENT.md` for the full Apps Script setup.
 
 ## Known TODOs
 
-- `SCRIPT_URL` in `assets/app.js` points to a personal account deployment — redeploy from org account per `DEPLOYMENT.md` and update the URL
 - Replace `GA_MEASUREMENT_ID` in `index.html` with the real Google Analytics property ID
 - Replace `og:image` placeholder path in `index.html` with the confirmed event photo
