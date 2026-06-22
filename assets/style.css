@@ -138,6 +138,20 @@ html, body {
 
 .page.active { opacity: 1; pointer-events: all; }
 
+/* ── Experience page — scrollable override ───────────────── */
+/* Has the most copy of any page; centering + overflow:hidden clipped
+   the headline off the top of the viewport on common laptop window
+   heights (~800–900px). Match the p2/p3 pattern instead. */
+#p1 {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  justify-content: flex-start;
+  padding-top: clamp(70px, 12vh, 110px);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#p1::-webkit-scrollbar { display: none; }
+
 /* ── Consent page — scrollable override ─────────────────── */
 #p2 {
   overflow-y: auto;

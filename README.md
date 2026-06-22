@@ -13,10 +13,10 @@ A 5-page single-page app with a curtain-wipe transition system. Visitors move th
 
 ```
 index.html          — markup only, no inline styles or scripts
+bg_info.jpeg        — confirmed background photo (pool party shot)
 assets/
   style.css         — all styles and responsive breakpoints
   app.js            — transitions, form logic, Apps Script POST
-  bg_info.jpeg      — confirmed background photo (pool party shot)
 apps-script/
   Code.gs           — backend: writes to Google Sheet + sends confirmation email
 CNAME               — GitHub Pages custom domain
