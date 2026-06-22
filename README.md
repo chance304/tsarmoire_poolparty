@@ -1,6 +1,6 @@
 # T's Armoire Summer Club — Invitation Microsite
 
-Invitation microsite for **T's Armoire Summer Club** (June 26), a poolside takeover at the Moxy Hotel.  
+Invitation microsite for **T's Armoire Summer Club** (June 26, 1PM), a poolside takeover at the Moxy Hotel.  
 Live at: `launch.tsarmoiremanufacturing.com.np`
 
 ---

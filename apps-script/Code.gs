@@ -121,25 +121,46 @@ function _appendRow(d) {
 
 function _sendConfirmation(d) {
   const firstName = String(d.name).trim().split(/\s+/)[0];
-  MailApp.sendEmail({
-    to: d.email,
-    subject: "T's Armoire Summer Club — You're on the list",
-    htmlBody: `
-      <div style="font-family:Georgia,serif;color:#151514;max-width:480px;margin:0 auto">
-        <p style="letter-spacing:.12em;font-size:11px;text-transform:uppercase;color:#96815c">
+
+  const htmlBody = `
+    <div style="background:#f6f4f0;padding:48px 24px;">
+      <div style="font-family:Georgia,'Times New Roman',serif;color:#151514;max-width:480px;margin:0 auto;">
+        <p style="letter-spacing:.5em;font-size:10px;text-transform:uppercase;color:#7a6948;margin:0 0 24px;">
           T's Armoire
         </p>
-        <h1 style="font-size:2rem;margin:.25em 0;font-weight:400">Thank you, ${firstName}.</h1>
-        <p style="line-height:1.7;color:#444">
+        <div style="width:32px;height:1px;background:#Daccb4;margin:0 0 28px;"></div>
+        <h1 style="font-size:2rem;margin:0 0 16px;font-weight:400;line-height:1.1;">
+          Thank you, ${firstName}.
+        </h1>
+        <p style="line-height:1.7;color:#444;margin:0 0 16px;">
           We've received your interest in <strong>T's Armoire Summer Club</strong> at the Moxy Hotel Pool
-          on <strong>June 26</strong>. Our guest list is curated and intimate — if selected, we'll reach
+          on <strong>June 26</strong> at <strong>1PM</strong>. Our guest list is curated and intimate — if selected, we'll reach
           out to you directly. Keep an eye on your inbox.
         </p>
-        <p style="line-height:1.7;color:#888;font-size:.875rem">
+        <p style="letter-spacing:.2em;font-size:10px;text-transform:uppercase;color:rgba(21,20,20,0.55);margin:32px 0 0;">
+          T's Armoire Summer Club — June 26 · 1PM · Moxy Hotel Pool
+        </p>
+        <p style="line-height:1.7;color:#888;font-size:.875rem;margin:24px 0 0;">
           — The T's Armoire Team
         </p>
       </div>
-    `
+    </div>
+  `;
+
+  /* Plain-text alternative — improves deliverability and covers clients
+     that don't render HTML */
+  const plainBody =
+    `Thank you, ${firstName}.\n\n` +
+    `We've received your interest in T's Armoire Summer Club at the Moxy Hotel Pool on June 26 at 1PM. ` +
+    `Our guest list is curated and intimate — if selected, we'll reach out to you directly. ` +
+    `Keep an eye on your inbox.\n\n` +
+    `— The T's Armoire Team`;
+
+  MailApp.sendEmail({
+    to: d.email,
+    subject: "T's Armoire Summer Club — You're on the list",
+    htmlBody: htmlBody,
+    body: plainBody
   });
 }
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A single-page invitation microsite for **T's Armoire Summer Club** (June 26) — a poolside takeover at the Moxy Hotel by T's Armoire. Deployed via GitHub Pages to `launch.tsarmoiremanufacturing.com.np` (CNAME). Registration is open/interest-based, not capacity-limited.
+A single-page invitation microsite for **T's Armoire Summer Club** (June 26, 1PM) — a poolside takeover at the Moxy Hotel by T's Armoire. Deployed via GitHub Pages to `launch.tsarmoiremanufacturing.com.np` (CNAME). Registration is open/interest-based, not capacity-limited.
 
 No build step, no dependencies, no test suite.
 
