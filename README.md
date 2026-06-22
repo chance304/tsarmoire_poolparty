@@ -1,13 +1,13 @@
-# TSA CAFE — Pre-Launch Microsite
+# T's Armoire Summer Club — Invitation Microsite
 
-Invitation microsite for the **TSA CAFE** breakfast event (May 6) by T's Armoire.  
+Invitation microsite for **T's Armoire Summer Club** (June 26), a poolside takeover at the Moxy Hotel.  
 Live at: `launch.tsarmoiremanufacturing.com.np`
 
 ---
 
 ## What it is
 
-A 5-page single-page app with a curtain-wipe transition system. Visitors move through an opening page, the event story, a social media consent screen, a registration form, and a thank-you page. Submissions are saved to a Google Sheet and trigger a confirmation email to the registrant.
+A 5-page single-page app with a curtain-wipe transition system. Visitors move through an opening page, the event story, a social media consent screen, a registration form, and a thank-you page. Submissions are saved to a Google Sheet and trigger a confirmation email to the registrant. Registration is open interest-based — there is no capacity/spots-remaining gate.
 
 ## File structure
 
@@ -16,7 +16,7 @@ index.html          — markup only, no inline styles or scripts
 assets/
   style.css         — all styles and responsive breakpoints
   app.js            — transitions, form logic, Apps Script POST
-  bg_info.jpeg      — confirmed background photo (TSA founder in studio)
+  bg_info.jpeg      — confirmed background photo (pool party shot)
 apps-script/
   Code.gs           — backend: writes to Google Sheet + sends confirmation email
 CNAME               — GitHub Pages custom domain
@@ -57,8 +57,8 @@ See `DEPLOYMENT.md` for the full Apps Script setup.
 
 | # | ID | Content |
 |---|---|---|
-| 1 | `#p0` | Opening — TSA CAFE |
-| 2 | `#p1` | The Experience — event story |
+| 1 | `#p0` | Opening — Summer Club |
+| 2 | `#p1` | The Experience — event story & pass perks |
 | 3 | `#p2` | Social Consent — Yes/No |
 | 4 | `#p3` | Registration Form |
 | 5 | `#p4` | Thank You |

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A single-page invitation microsite for the **TSA CAFE** pre-launch event (May 6) by T's Armoire. Deployed via GitHub Pages to `launch.tsarmoiremanufacturing.com.np` (CNAME).
+A single-page invitation microsite for **T's Armoire Summer Club** (June 26) — a poolside takeover at the Moxy Hotel by T's Armoire. Deployed via GitHub Pages to `launch.tsarmoiremanufacturing.com.np` (CNAME). Registration is open/interest-based, not capacity-limited.
 
 No build step, no dependencies, no test suite.
 
@@ -12,10 +12,10 @@ No build step, no dependencies, no test suite.
 
 ```
 index.html              — markup only (no inline styles or scripts)
+bg_info.jpeg            — confirmed background photo (pool party shot)
 assets/
   style.css             — all styles, design tokens, responsive breakpoints
   app.js                — SPA transitions, form validation, Apps Script POST
-  bg_info.jpeg          — confirmed background photo (TSA founder in studio, portrait)
 apps-script/
   Code.gs               — Google Apps Script backend (Sheet write + confirmation email)
 CNAME                   — GitHub Pages custom domain
@@ -72,7 +72,7 @@ id, name, email, instagram, tiktok, phone, social_consent, registered_at
 ## Design tokens
 
 - Background: `#f6f4f0` (off-white warm — matches tsarmoire.com)
-- Background image: `assets/bg_info.jpeg` — portrait photo, positioned `80% center` on desktop, `65% center` on mobile; layered warm gradient overlay for legibility
+- Background image: `bg_info.jpeg` (repo root) — pool party photo, positioned `80% center` on desktop, `65% center` on mobile; layered warm gradient overlay for legibility
 - Primary text: `#151514` (near-black warm)
 - Accent (decorative): `#Daccb4` (warm tan — rules, progress bar)
 - Accent (tags/focus): `#7a6948` / `#baac8a` (dark earth tones)

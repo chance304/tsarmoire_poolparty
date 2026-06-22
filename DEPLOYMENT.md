@@ -15,7 +15,7 @@ This must be done from the **T's Armoire Google account**, not a personal accoun
 ### Step 1 — Create the Google Sheet
 
 1. Go to [sheets.google.com](https://sheets.google.com) and sign in as T's Armoire
-2. Create a new spreadsheet, name it: `TSA CAFE Registrations`
+2. Create a new spreadsheet, name it: `T's Armoire Summer Club Registrations`
 3. Leave it empty — the script creates the header row automatically on first submission
 
 The sheet will have the following columns once the first submission arrives:
@@ -27,14 +27,14 @@ The sheet will have the following columns once the first submission arrives:
 1. In the spreadsheet, click **Extensions → Apps Script**
 2. Delete all placeholder code
 3. Copy the contents of `apps-script/Code.gs` from this repo and paste it in
-4. Click **Save** (name the project anything, e.g. `TSA CAFE Backend`)
+4. Click **Save** (name the project anything, e.g. `T's Armoire Summer Club Backend`)
 
 ### Step 3 — Deploy as a Web App
 
 1. Click **Deploy → New deployment**
 2. Click the gear icon next to "Select type" and choose **Web App**
 3. Set:
-   - **Description**: `TSA CAFE v1` (or anything)
+   - **Description**: `T's Armoire Summer Club v1` (or anything)
    - **Execute as**: `Me` (the T's Armoire account)
    - **Who has access**: `Anyone`
 4. Click **Deploy**

@@ -84,7 +84,7 @@ function handleConsent(choice) {
 }
 
 /* ── Registration ────────────────────────────────────────── */
-const STORE_KEY  = 'tsa_cafe_registrations';
+const STORE_KEY  = 'tsa_summer_club_registrations';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKuSCDIDko0cKfjoDf0yDtHA3cj_ErEvhNsvsbA5Eq4AvV6QBgwYQhmVUNuYeR5Mhb/exec';
 
 function setFieldError(fieldEl, errEl, msg) {

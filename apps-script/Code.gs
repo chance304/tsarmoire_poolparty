@@ -123,7 +123,7 @@ function _sendConfirmation(d) {
   const firstName = String(d.name).trim().split(/\s+/)[0];
   MailApp.sendEmail({
     to: d.email,
-    subject: "TSA CAFE — You're on the list",
+    subject: "T's Armoire Summer Club — You're on the list",
     htmlBody: `
       <div style="font-family:Georgia,serif;color:#151514;max-width:480px;margin:0 auto">
         <p style="letter-spacing:.12em;font-size:11px;text-transform:uppercase;color:#96815c">
@@ -131,9 +131,9 @@ function _sendConfirmation(d) {
         </p>
         <h1 style="font-size:2rem;margin:.25em 0;font-weight:400">Thank you, ${firstName}.</h1>
         <p style="line-height:1.7;color:#444">
-          We've received your interest in <strong>TSA CAFE</strong> on <strong>May 6</strong>.
-          Our guest list is curated and intimate — if selected, we'll reach out to you directly.
-          Keep an eye on your inbox.
+          We've received your interest in <strong>T's Armoire Summer Club</strong> at the Moxy Hotel Pool
+          on <strong>June 26</strong>. Our guest list is curated and intimate — if selected, we'll reach
+          out to you directly. Keep an eye on your inbox.
         </p>
         <p style="line-height:1.7;color:#888;font-size:.875rem">
           — The T's Armoire Team
